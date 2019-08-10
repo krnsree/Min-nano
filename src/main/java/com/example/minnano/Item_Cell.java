@@ -7,7 +7,7 @@ public class Item_Cell
 {
     private String productTitle;
     private String productPrice;
-    private Uri productImage;
+    private String productImage;
 
     public Item_Cell() { }
 
@@ -19,7 +19,7 @@ public class Item_Cell
 
     public void setProductPrice(String productPrice) { this.productPrice = productPrice; }
 
-    public Uri getProductImage() { return productImage; }
+    public String getProductImage() { return productImage; }
 
-    public void setProductImage(Uri productImage) { this.productImage = productImage; }
+    public void setProductImage(String productImage) { this.productImage = productImage; }
 }

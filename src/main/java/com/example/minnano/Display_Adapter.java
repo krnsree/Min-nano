@@ -1,7 +1,7 @@
 package com.example.minnano;
 
 import android.content.Context;
-import android.util.Log;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,52 +11,42 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
-
-public class Display_Adapter extends RecyclerView.Adapter<Display_Adapter.ViewHolder>
+public class Display_Adapter extends FirestoreRecyclerAdapter<Item_Cell,Display_Adapter.ViewHolder>
 {
-    Context context;
-    ArrayList<Item_Cell> productList=new ArrayList<>();
 
-    public Display_Adapter(Context context,ArrayList<Item_Cell> productList)
+    Context context;
+    /**
+     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
+     * FirestoreRecyclerOptions} for configuration options.
+     *
+     * @param options
+     */
+    public Display_Adapter(@NonNull FirestoreRecyclerOptions<Item_Cell> options, Context context)
     {
+        super(options);
         this.context=context;
-        this.productList=productList;
+    }
+
+    @Override
+    protected void onBindViewHolder(@NonNull ViewHolder viewHolder, int i, @NonNull Item_Cell item_cell)
+    {
+        viewHolder.title.setText(item_cell.getProductTitle());
+        viewHolder.price.setText(item_cell.getProductPrice());
+        Picasso.with(context)
+                .load(item_cell.getProductImage())
+                .resize(300,300).into(viewHolder.image);
     }
 
     @NonNull
     @Override
-    public Display_Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        View view= (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_item__cell,parent,false);
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull Display_Adapter.ViewHolder holder, int position)
-    {
-        Log.e(TAG, "onBindViewHolder1: "+productList.get(position).getProductImage());
-        Log.e(TAG,"onBindViewHolder2: "+productList.get(position).getProductTitle());
-        Log.e(TAG,"onBindViewHolder3: "+productList.get(position).getProductPrice());
-        holder.title.setText(productList.get(position).getProductTitle());
-        holder.price.setText(productList.get(position).getProductPrice());
-        //holder.image.setImageURI(productList.get(position).getProductImage());
-        holder.image.setScaleType(ImageView.ScaleType.MATRIX);
-        holder.image.setAdjustViewBounds(true);
-        Picasso.with(context)
-                .load(productList.get(position).getProductImage())
-                .resize(300,300).into(holder.image);
-        holder.image.setAdjustViewBounds(true);
-        holder.image.setScaleType(ImageView.ScaleType.CENTER);
-    }
-
-    @Override
-    public int getItemCount() {
-        return productList.size();
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_item__cell,parent,false);
+        return new ViewHolder(v);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder
