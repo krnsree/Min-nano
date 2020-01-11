@@ -1,7 +1,10 @@
 package com.example.minnano;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -18,6 +22,7 @@ import com.squareup.picasso.Picasso;
 public class Display_Adapter extends FirestoreRecyclerAdapter<Item_Cell,Display_Adapter.ViewHolder>
 {
 
+    private static final String TAG = "TAG";
     Context context;
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
@@ -32,13 +37,41 @@ public class Display_Adapter extends FirestoreRecyclerAdapter<Item_Cell,Display_
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder viewHolder, int i, @NonNull Item_Cell item_cell)
+    protected void onBindViewHolder(@NonNull ViewHolder viewHolder, int i, @NonNull final Item_Cell item_cell)
     {
+
         viewHolder.title.setText(item_cell.getProductTitle());
-        viewHolder.price.setText(item_cell.getProductPrice());
-        Picasso.with(context)
-                .load(item_cell.getProductImage())
-                .resize(300,300).into(viewHolder.image);
+        viewHolder.title.setTextSize(18);
+        //viewHolder.title.setShadowLayer(2,5,5, Color.GRAY);
+        viewHolder.price.setText("Rs "+(item_cell.getProductPrice()));
+        viewHolder.price.setTextSize(17);
+        //viewHolder.price.setShadowLayer(2,5,5, Color.GRAY);
+        if(item_cell.getProductImage()!=null)
+        {
+            Picasso.with(context)
+                    .load(Uri.parse(item_cell.getProductImage()))
+                    .into(viewHolder.image);
+        }
+
+
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(context, Product_Page.class);
+                intent.putExtra("TITLE",item_cell.getProductTitle());
+                intent.putExtra("PRICE",item_cell.getProductPrice());
+                intent.putExtra("IMAGE",item_cell.getProductImage());
+                intent.putExtra("COLOR",item_cell.getColor());
+                intent.putExtra("TYPE",item_cell.getType());
+                intent.putExtra("MODEL",item_cell.getModel());
+                intent.putExtra("CONNECT",item_cell.getConnectivity());
+                intent.putExtra("PID",item_cell.getPid());
+                Log.e(TAG, "onClick:"+item_cell.getPid());
+
+                context.startActivity(intent);
+            }
+        });
     }
 
     @NonNull

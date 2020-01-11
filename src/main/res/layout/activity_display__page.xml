@@ -4,13 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Display_Page">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:elevation="@dimen/cardview_default_radius">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/small_logo" />
+
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/imageButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_search_black_24dp" />
+
+]
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/itemList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/Primary">
+        android:background="@drawable/kiran2">
+
 
     </androidx.recyclerview.widget.RecyclerView>
 
